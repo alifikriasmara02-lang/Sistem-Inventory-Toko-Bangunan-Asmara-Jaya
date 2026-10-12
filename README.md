@@ -66,7 +66,9 @@ Frontend menggunakan publishable key (`sb_publishable_...`) dan access token ses
 
 ## GitHub
 
-Repository: [Sistem Inventory Toko Bangunan Asmara Jaya](https://github.com/alifikriasmara02-lang/Sistem-Inventory-Toko-Bangunan-Asmara-Jaya)
+Aplikasi: [Buka Sistem Inventory Toko Bangunan Asmara Jaya](https://alifikriasmara02-lang.github.io/Sistem-Inventory-Toko-Bangunan-Asmara-Jaya/)
+
+Repository: [Lihat source code di GitHub](https://github.com/alifikriasmara02-lang/Sistem-Inventory-Toko-Bangunan-Asmara-Jaya)
 
 Pasang Git for Windows terlebih dahulu jika perintah `git` belum tersedia. Buat repository kosong di GitHub, lalu jalankan dari folder proyek di PowerShell:
 
