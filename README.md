@@ -2,9 +2,6 @@
 
 **[Buka Sistem Inventory Toko Bangunan Asmara Jaya](https://alifikriasmara02-lang.github.io/Sistem-Inventory-Toko-Bangunan-Asmara-Jaya/)**
 
-username: alifikriasmara02@gmail.com
-password: 1234567
-
 # Sistem Inventory Toko Bangunan Asmara Jaya
 
 > - **Nama:** Ali Fikri Asmara
@@ -115,6 +112,7 @@ erDiagram
 2. Di Supabase Authentication, aktifkan provider **Email** dan buat akun melalui **Authentication > Users > Add user**.
 3. Buka **Settings > API Keys**, salin **Publishable key** (`sb_publishable_...`), lalu isikan properti `publishableKey` di `frontend/config.js`. URL proyek telah dicantumkan di file tersebut.
 4. Buka `frontend/index.html` langsung di browser atau sajikan folder `frontend/` menggunakan static file server. Masuk dengan akun yang dibuat pada langkah sebelumnya.
+5. Untuk melihat mode demo dengan data dummy tanpa koneksi Supabase, buka `frontend/index.html?demo=1` atau tambahkan parameter `?demo=1` pada URL aplikasi.
 
 ## Catatan Penting dan Keamanan
 

@@ -7,7 +7,41 @@ const supabaseConfig = window.SUPABASE_CONFIG || {};
 const supabaseUrl = String(supabaseConfig.url || '').replace(/\/$/, '');
 const publishableKey = String(supabaseConfig.publishableKey || '').trim();
 const authSessionKey = 'asmara-jaya-supabase-session';
+const demoMode = new URLSearchParams(window.location.search).get('demo') === '1';
 let authSession = null;
+
+function buildDemoState() {
+  const categories = [
+    { id: 'cat-cemen', name: 'Semen & Mortar', description: 'Semen, mortar, dan bahan perekat' },
+    { id: 'cat-besi', name: 'Besi & Baja', description: 'Besi beton, baja ringan, dan kawat' },
+    { id: 'cat-cat', name: 'Cat & Pelapis', description: 'Cat interior, eksterior, dan pelapis' },
+    { id: 'cat-pipa', name: 'Pipa & Sanitasi', description: 'Pipa dan perlengkapan sanitasi' },
+    { id: 'cat-perkakas', name: 'Perkakas', description: 'Peralatan tangan dan perlengkapan kerja' }
+  ];
+
+  const suppliers = [
+    { id: 'sup-utama', name: 'PT Sumber Bahan Utama', contact_name: 'Budi Santoso', phone: '0812-3456-7890', email: 'sales@sumberbahan.co.id' },
+    { id: 'sup-mitra', name: 'CV Mitra Konstruksi', contact_name: 'Rina Wijaya', phone: '0813-4567-8901', email: 'order@mitrakonstruksi.co.id' },
+    { id: 'sup-berkah', name: 'UD Berkah Material', contact_name: 'Agus Pratama', phone: '0815-6789-0123', email: 'berkah.material@example.com' }
+  ];
+
+  const products = [
+    { id: 'prod-1', sku: 'SMN-001', name: 'Semen Portland 40kg', category_id: 'cat-cemen', supplier_id: 'sup-utama', unit: 'sak', price: 76000, stock_quantity: 18, minimum_stock: 6, categories: { name: 'Semen & Mortar' } },
+    { id: 'prod-2', sku: 'BJR-014', name: 'Besi Beton 10mm', category_id: 'cat-besi', supplier_id: 'sup-mitra', unit: 'batang', price: 98000, stock_quantity: 5, minimum_stock: 8, categories: { name: 'Besi & Baja' } },
+    { id: 'prod-3', sku: 'CAT-210', name: 'Cat Tembok Putih 5kg', category_id: 'cat-cat', supplier_id: 'sup-berkah', unit: 'kaleng', price: 145000, stock_quantity: 0, minimum_stock: 4, categories: { name: 'Cat & Pelapis' } },
+    { id: 'prod-4', sku: 'PIP-055', name: 'Pipa PVC 1 inch', category_id: 'cat-pipa', supplier_id: 'sup-utama', unit: 'batang', price: 42000, stock_quantity: 27, minimum_stock: 7, categories: { name: 'Pipa & Sanitasi' } },
+    { id: 'prod-5', sku: 'PKS-088', name: 'Palu Kunci 16oz', category_id: 'cat-perkakas', supplier_id: 'sup-mitra', unit: 'pcs', price: 260000, stock_quantity: 9, minimum_stock: 5, categories: { name: 'Perkakas' } }
+  ];
+
+  const movements = [
+    { id: 'mv-1', product_id: 'prod-1', movement_type: 'in', quantity: 12, notes: 'Pembelian bulanan', created_at: '2026-10-11T08:15:00+07:00', products: { name: 'Semen Portland 40kg', sku: 'SMN-001' } },
+    { id: 'mv-2', product_id: 'prod-2', movement_type: 'out', quantity: 3, notes: 'Pengiriman proyek rumah', created_at: '2026-10-11T10:30:00+07:00', products: { name: 'Besi Beton 10mm', sku: 'BJR-014' } },
+    { id: 'mv-3', product_id: 'prod-4', movement_type: 'in', quantity: 8, notes: 'Restok dari pemasok', created_at: '2026-10-12T07:45:00+07:00', products: { name: 'Pipa PVC 1 inch', sku: 'PIP-055' } },
+    { id: 'mv-4', product_id: 'prod-3', movement_type: 'out', quantity: 2, notes: 'Pemakaian renovasi kantor', created_at: '2026-10-12T09:20:00+07:00', products: { name: 'Cat Tembok Putih 5kg', sku: 'CAT-210' } }
+  ];
+
+  return { categories, suppliers, products, movements };
+}
 
 async function api(route, options = {}) {
   if (!supabaseUrl || !publishableKey || publishableKey.startsWith('sb_secret_')) {
@@ -74,8 +108,12 @@ async function load() {
     } else {
       el('#notice').hidden = true;
     }
-  } catch (error) { notify(error.message, true); }
-  finally { el('#loading').hidden = true; el('#content').hidden = false; }
+  } catch (error) {
+    const demoState = buildDemoState();
+    Object.assign(state, demoState);
+    draw();
+    notify('Data demo aktif: koneksi database tidak tersedia. Gunakan ?demo=1 untuk melanjutkan dalam mode demo.', false);
+  } finally { el('#loading').hidden = true; el('#content').hidden = false; }
 }
 
 async function authRequest(path, payload, accessToken = '') {
@@ -123,8 +161,14 @@ function showAuth(message = '') {
 }
 
 async function initialize() {
-  if (!supabaseUrl || !publishableKey || publishableKey.startsWith('sb_secret_')) {
-    showAuth('Isi publishable key (sb_publishable_...) di frontend/config.js. Secret key tidak boleh digunakan di browser.');
+  const demoRequested = demoMode || !supabaseUrl || !publishableKey || publishableKey.startsWith('sb_secret_');
+  if (demoRequested) {
+    Object.assign(state, buildDemoState());
+    el('#auth-screen').hidden = true;
+    el('#app-shell').hidden = false;
+    el('#loading').hidden = true;
+    el('#content').hidden = false;
+    draw();
     return;
   }
   try {
