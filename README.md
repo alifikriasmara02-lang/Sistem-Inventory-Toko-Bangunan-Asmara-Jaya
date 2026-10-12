@@ -20,6 +20,7 @@ Aplikasi dibuat dengan HTML, CSS, dan JavaScript tanpa proses build atau server 
 
 ## Fitur
 
+- Beranda dan layar login dengan foto toko bangunan serta kategori material.
 - Login dan logout menggunakan akun Supabase.
 - Ringkasan jumlah jenis barang, total unit, barang yang mencapai batas stok minimum, dan nilai persediaan.
 - Daftar barang dengan pencarian berdasarkan nama atau SKU dan filter kategori.
@@ -94,7 +95,10 @@ erDiagram
     ├── index.html                  # Antarmuka aplikasi
     ├── app.js                      # Autentikasi, API, dan interaksi aplikasi
     ├── config.js                   # URL Supabase dan publishable key
-    └── styles.css                  # Tampilan responsif
+    ├── styles.css                  # Tampilan responsif
+    ├── theme.css                   # Tema visual beranda dan komponen
+    └── assets/
+        └── hardware-store.jpg      # Foto toko dan perkakas
 ```
 
 ## Teknologi

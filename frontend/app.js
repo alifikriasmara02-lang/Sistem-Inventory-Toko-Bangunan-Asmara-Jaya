@@ -242,6 +242,7 @@ function setView(view) {
   }[view];
   el('#title').textContent = copy[0]; el('#subtitle').textContent = copy[1];
   el('#crumb').textContent = copy[2]; el('#inventory-title').textContent = copy[3];
+  el('.store-hero').hidden = view !== 'overview';
   el('#stats').hidden = view !== 'overview';
   el('#inventory').style.display = view === 'movements' ? 'none' : '';
   el('#activity').style.display = view === 'products' ? 'none' : '';

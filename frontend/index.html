@@ -9,9 +9,27 @@
 </head>
 <body>
   <section class="auth-screen" id="auth-screen" hidden>
+    <div class="auth-layout">
+      <section class="auth-story" aria-label="Toko bangunan Asmara Jaya">
+        <img src="./assets/hardware-store.jpg" alt="Beragam perkakas yang tersedia di toko bangunan" fetchpriority="high">
+        <div class="auth-story-shade"></div>
+        <div class="auth-story-content">
+          <span class="auth-story-brand"><i data-lucide="warehouse"></i> ASMARA JAYA</span>
+          <p class="eyebrow">TOKO BANGUNAN TERPERCAYA</p>
+          <h2>Bangun lebih kuat,<br>mulai dari sini.</h2>
+          <p>Temukan kebutuhan proyek dari semen, pasir, besi, hingga perkakas dalam satu tempat.</p>
+          <div class="material-tags" aria-label="Kategori bahan bangunan">
+            <span><i data-lucide="blocks"></i> Semen</span>
+            <span><i data-lucide="mountain"></i> Pasir</span>
+            <span><i data-lucide="construction"></i> Besi</span>
+            <span><i data-lucide="paint-roller"></i> Cat</span>
+          </div>
+        </div>
+        <small class="auth-story-caption"><i data-lucide="map-pin"></i> Toko Bangunan Asmara Jaya</small>
+      </section>
     <form class="auth-card" id="auth-form">
       <span class="brand-icon"><i data-lucide="warehouse"></i></span>
-      <p class="eyebrow">TOKO BANGUNAN ASMARA JAYA</p>
+      <p class="eyebrow">SELAMAT DATANG KEMBALI</p>
       <h1>Masuk ke inventory</h1>
       <p class="subtitle">Gunakan akun Supabase toko untuk membuka data persediaan.</p>
       <div class="auth-message" id="auth-message" role="status" hidden></div>
@@ -20,6 +38,7 @@
       <button class="button primary" type="submit"><i data-lucide="log-in"></i><span>Masuk</span></button>
       <small>Akun dibuat melalui Authentication di Supabase Dashboard.</small>
     </form>
+    </div>
   </section>
   <div class="shell" id="app-shell" hidden>
     <aside class="sidebar">
@@ -33,7 +52,24 @@
       <header class="topbar"><div class="crumb">Asmara Jaya <i data-lucide="chevron-right"></i> <b id="crumb">Ringkasan</b></div><div class="top-actions"><span id="today"></span><span class="avatar">AJ</span><button class="icon-button" id="sign-out" type="button" title="Keluar"><i data-lucide="log-out"></i></button></div></header>
       <section class="page-heading"><div><p class="eyebrow">PUSAT KENDALI TOKO</p><h1 id="title">Ringkasan stok</h1><p class="subtitle" id="subtitle">Pantau persediaan dan aktivitas toko hari ini.</p></div><div class="actions"><button class="button secondary" id="refresh" title="Muat ulang"><i data-lucide="refresh-cw"></i><span>Muat ulang</span></button><button class="button primary" id="add"><i data-lucide="plus"></i><span>Tambah barang</span></button></div></section>
       <div id="notice" class="notice" role="status" hidden></div><div id="loading" class="loading"><i></i> Menghubungkan ke database...</div>
-      <div id="content" hidden><section class="stats" id="stats"></section><div class="columns">
+      <div id="content" hidden>
+        <section class="store-hero" aria-label="Toko Bangunan Asmara Jaya">
+          <img src="./assets/hardware-store.jpg" alt="Perkakas dan perlengkapan bangunan di toko" loading="lazy">
+          <div class="store-hero-shade"></div>
+          <div class="store-hero-content">
+            <span class="store-hero-label"><i data-lucide="sparkles"></i> LENGKAP UNTUK KEBUTUHAN PROYEK</span>
+            <h2>Wujudkan bangunan<br>impian Anda.</h2>
+            <p>Pantau stok semen, pasir, besi, cat, dan perlengkapan bangunan lainnya dengan mudah.</p>
+            <button class="button store-hero-button" type="button" data-goto="products">Jelajahi barang <i data-lucide="arrow-right"></i></button>
+          </div>
+          <div class="store-hero-tags" aria-label="Kategori pilihan">
+            <span><i data-lucide="blocks"></i> Semen</span>
+            <span><i data-lucide="mountain"></i> Pasir</span>
+            <span><i data-lucide="construction"></i> Besi</span>
+            <span><i data-lucide="paint-roller"></i> Cat & perkakas</span>
+          </div>
+        </section>
+        <section class="stats" id="stats"></section><div class="columns">
         <section class="panel inventory" id="inventory"><div class="panel-head"><div><small>PERSEDIAAN</small><h2 id="inventory-title">Stok barang</h2></div><button class="link-button" data-goto="products">Lihat semua <i data-lucide="arrow-up-right"></i></button></div>
           <div class="toolbar"><label class="search"><i data-lucide="search"></i><input id="search" type="search" placeholder="Cari nama atau SKU..." aria-label="Cari barang"></label><label class="filter"><span class="sr-only">Kategori</span><select id="category-filter"><option value="">Semua kategori</option></select><i data-lucide="chevron-down"></i></label></div>
           <div class="table-wrap"><table><thead><tr><th>BARANG</th><th>KATEGORI</th><th>HARGA</th><th>STOK</th><th>STATUS</th><th></th></tr></thead><tbody id="products"></tbody></table><div id="empty" class="empty" hidden><i data-lucide="package-open"></i><b>Barang belum tersedia</b><span>Tambahkan barang atau ubah pencarian.</span></div></div>
