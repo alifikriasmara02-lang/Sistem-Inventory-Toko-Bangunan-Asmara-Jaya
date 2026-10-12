@@ -1,11 +1,41 @@
+## Demo Aplikasi
+
+**[Buka Sistem Inventory Toko Bangunan Asmara Jaya](https://alifikriasmara02-lang.github.io/Sistem-Inventory-Toko-Bangunan-Asmara-Jaya/)**
+
 # Sistem Inventory Toko Bangunan Asmara Jaya
 
-Aplikasi inventory HTML/CSS/JavaScript terhubung langsung ke Supabase Auth dan PostgreSQL REST API. Tidak memerlukan Node.js atau server backend.
+> - **Nama:** Ali Fikri Asmara
+> - **NIM:** 12030124120074
+> - **Mata Kuliah:** Pengkodean dan Pemograman
+> - **Kelas:** D
+> - **Dosen Pengampu:** Dr. Totok Dewayanto, S.E., M.Si., Akt.
+>
+> Disusun untuk memenuhi Tugas Project UTS Pengkodean dan Pemograman.
 
-```text
-frontend/  index.html, styles.css, app.js, config.js
-backend/   schema.sql
-```
+## Penjelasan Sistem
+
+Sistem Inventory Toko Bangunan Asmara Jaya adalah aplikasi web untuk memantau katalog barang dan persediaan toko. Pengguna masuk menggunakan akun Supabase, lalu dapat melihat ringkasan stok, mencari dan memfilter barang, menambahkan barang, serta mencatat pergerakan stok masuk dan keluar.
+
+Aplikasi dibuat dengan HTML, CSS, dan JavaScript tanpa proses build atau server aplikasi khusus. Data disimpan di PostgreSQL melalui Supabase REST API, sedangkan Supabase Auth menangani autentikasi pengguna.
+
+## Fitur
+
+- Login dan logout menggunakan akun Supabase.
+- Ringkasan jumlah jenis barang, total unit, barang yang mencapai batas stok minimum, dan nilai persediaan.
+- Daftar barang dengan pencarian berdasarkan nama atau SKU dan filter kategori.
+- Penambahan barang dengan SKU, kategori, pemasok opsional, satuan, harga jual, dan batas stok minimum.
+- Pencatatan stok masuk atau keluar dengan jumlah dan catatan opsional.
+- Riwayat aktivitas stok terbaru beserta nama barang, waktu, jumlah, dan jenis mutasi.
+- Penanda barang tersedia, stok rendah, atau habis, serta tombol muat ulang data.
+
+## Logika Persediaan dan Akuntansi
+
+- Barang baru memiliki jumlah stok awal **0**. Setelah barang ditambahkan, catat mutasi stok masuk untuk menambah persediaan.
+- Mutasi masuk menambah stok (`stok baru = stok lama + jumlah`); mutasi keluar menguranginya (`stok baru = stok lama - jumlah`).
+- Database menjalankan trigger untuk memperbarui stok saat mutasi dicatat. Mutasi keluar yang melebihi stok yang tersedia ditolak.
+- Barang berstatus **stok rendah** jika stoknya lebih besar dari 0 dan sama dengan atau di bawah batas minimum. Status **habis** berlaku saat stok 0.
+- Nilai persediaan pada ringkasan dihitung sebagai **jumlah stok × harga jual** setiap barang, lalu dijumlahkan. Angka ini merupakan estimasi berdasarkan harga jual, bukan nilai modal atau penilaian akuntansi persediaan.
+- Aplikasi mencatat kuantitas dan riwayat mutasi, tetapi belum mencatat transaksi penjualan/pembelian, harga pokok penjualan, laba, atau jurnal akuntansi. Karena itu, aplikasi ini adalah sistem inventory, bukan sistem pembukuan akuntansi lengkap.
 
 ## ERD
 
@@ -47,41 +77,52 @@ erDiagram
   }
 ```
 
-## Setup Supabase
+**Relasi:** Satu kategori dapat mengelompokkan banyak barang; satu pemasok dapat memasok banyak barang dan pemasok pada barang bersifat opsional. Satu barang dapat memiliki banyak catatan mutasi stok. Barang yang sudah memiliki riwayat mutasi tidak dapat dihapus dari relasinya.
 
-1. Jalankan `backend/schema.sql` di Supabase SQL Editor. Skrip ini membuat empat tabel, mengaktifkan RLS, dan memberi akses hanya pada pengguna yang login.
-2. Di Supabase Authentication, aktifkan provider Email dan buat akun toko melalui **Authentication > Users > Add user**.
-3. Buka Supabase **Settings > API Keys**, salin **Publishable key** (`sb_publishable_...`), lalu isi properti `publishableKey` di `frontend/config.js`. URL proyek sudah tersedia di file tersebut.
-4. Buka `frontend/index.html` langsung atau sajikan folder `frontend/` dengan static file server. Masuk menggunakan akun yang dibuat di langkah 2.
+## Struktur Folder
 
-## Keamanan
-
-Frontend menggunakan publishable key (`sb_publishable_...`) dan access token sesi login. Publishable key boleh berada di frontend, tetapi akses data tetap harus dibatasi dengan RLS. Jangan pernah memasukkan secret key (`sb_secret_...`), key `service_role`, password, atau file `.env` ke GitHub. File environment lokal sudah dikecualikan oleh `.gitignore`. Trigger database memperbarui stok secara atomik dan menolak mutasi stok keluar yang melebihi saldo.
-
-> **Peringatan keamanan**
->
-> Riwayat GitHub sebelumnya pernah memuat file `.env` dengan nilai `SUPABASE_SERVICE_ROLE_KEY`. Riwayat branch `main` sudah ditulis ulang agar commit tersebut tidak lagi berada pada riwayat branch.
->
-> Tetap segera rotasi atau revoke key tersebut di Supabase. Penulisan ulang riwayat tidak menggantikan rotasi kredensial. File `.env` lokal sudah dikecualikan oleh `.gitignore`.
-
-## GitHub
-
-Aplikasi: [Buka Sistem Inventory Toko Bangunan Asmara Jaya](https://alifikriasmara02-lang.github.io/Sistem-Inventory-Toko-Bangunan-Asmara-Jaya/)
-
-Repository: [Lihat source code di GitHub](https://github.com/alifikriasmara02-lang/Sistem-Inventory-Toko-Bangunan-Asmara-Jaya)
-
-Pasang Git for Windows terlebih dahulu jika perintah `git` belum tersedia. Buat repository kosong di GitHub, lalu jalankan dari folder proyek di PowerShell:
-
-```powershell
-git init
-git add .
-git status --short
-git check-ignore -v backend/.env
-git diff --cached
-git commit -m "Sistem inventory Asmara Jaya"
-git branch -M main
-git remote add origin https://github.com/alifikriasmara02-lang/Sistem-Inventory-Toko-Bangunan-Asmara-Jaya.git
-git push -u origin main
+```text
+.
+├── README.md
+├── index.html                      # Pengarah ke aplikasi frontend
+├── backend/
+│   └── schema.sql                  # Tabel, relasi, RLS, trigger, dan data awal
+├── docs/
+│   ├── laporan-skema-inventory-asmara-jaya.pdf
+│   └── skema-inventory-asmara-jaya.md
+└── frontend/
+    ├── index.html                  # Antarmuka aplikasi
+    ├── app.js                      # Autentikasi, API, dan interaksi aplikasi
+    ├── config.js                   # URL Supabase dan publishable key
+    └── styles.css                  # Tampilan responsif
 ```
 
-Sebelum commit, pastikan `backend/.env` tidak muncul pada hasil `git status --short` dan periksa isi staged files dengan `git diff --cached`. Jangan menaruh password atau secret Supabase di URL remote maupun file proyek.
+## Teknologi
+
+- **Frontend:** HTML, CSS, dan JavaScript.
+- **Database dan API:** Supabase PostgreSQL dan REST API.
+- **Autentikasi:** Supabase Auth dengan provider Email.
+- **Keamanan akses data:** PostgreSQL Row Level Security (RLS) untuk pengguna terautentikasi.
+- **Hosting demo:** GitHub Pages.
+- **Ikon dan font:** Lucide, DM Sans, dan Manrope yang dimuat dari CDN.
+
+## Menjalankan Aplikasi
+
+1. Siapkan proyek Supabase dan jalankan `backend/schema.sql` di **SQL Editor**. Skrip membuat tabel, relasi, trigger stok, kebijakan RLS, kategori, dan pemasok awal.
+2. Di Supabase Authentication, aktifkan provider **Email** dan buat akun melalui **Authentication > Users > Add user**.
+3. Buka **Settings > API Keys**, salin **Publishable key** (`sb_publishable_...`), lalu isikan properti `publishableKey` di `frontend/config.js`. URL proyek telah dicantumkan di file tersebut.
+4. Buka `frontend/index.html` langsung di browser atau sajikan folder `frontend/` menggunakan static file server. Masuk dengan akun yang dibuat pada langkah sebelumnya.
+
+## Catatan Penting dan Keamanan
+
+- Aplikasi demo tetap memerlukan konfigurasi Supabase yang benar dan akun pengguna yang valid. Jangan membagikan kredensial login toko kepada publik.
+- Hanya gunakan publishable key (`sb_publishable_...`) di frontend. **Jangan pernah** memasukkan secret key (`sb_secret_...`), key `service_role`, kata sandi, atau file `.env` ke GitHub.
+- RLS membatasi akses tabel kepada pengguna yang sudah login. Jangan menonaktifkan RLS untuk membuat aplikasi demo dapat diakses.
+- Riwayat GitHub sebelumnya pernah memuat file `.env` dengan nilai `SUPABASE_SERVICE_ROLE_KEY`. Riwayat branch `main` sudah ditulis ulang agar commit tersebut tidak lagi berada pada riwayat branch. **Tetap segera rotasi atau revoke key tersebut di Supabase.** Penulisan ulang riwayat tidak menggantikan rotasi kredensial.
+- Tidak memerlukan Node.js atau server backend aplikasi. Koneksi database dan autentikasi dilakukan langsung dari frontend ke Supabase.
+
+## Tautan
+
+- **Demo:** [Sistem Inventory Toko Bangunan Asmara Jaya](https://alifikriasmara02-lang.github.io/Sistem-Inventory-Toko-Bangunan-Asmara-Jaya/)
+- **Repository:** [GitHub](https://github.com/alifikriasmara02-lang/Sistem-Inventory-Toko-Bangunan-Asmara-Jaya)
+- **Laporan skema:** [docs/laporan-skema-inventory-asmara-jaya.pdf](docs/laporan-skema-inventory-asmara-jaya.pdf)
