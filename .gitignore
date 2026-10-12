@@ -1,0 +1,19 @@
+# Environment files and secrets
+.env
+.env.*
+**/.env
+**/.env.*
+*.pem
+*.key
+
+# Local dependencies and logs
+node_modules/
+npm-debug.log*
+*.log
+
+# Local operating-system files
+.DS_Store
+Thumbs.db
+
+# Supabase CLI local state
+supabase/.temp/

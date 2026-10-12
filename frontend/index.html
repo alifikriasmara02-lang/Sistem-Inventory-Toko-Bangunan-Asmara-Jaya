@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f6f2"><title>Asmara Jaya | Inventory</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css"><script src="https://unpkg.com/lucide@latest"></script><script src="./config.js"></script><script src="./app.js" defer></script>
+</head>
+<body>
+  <section class="auth-screen" id="auth-screen" hidden>
+    <form class="auth-card" id="auth-form">
+      <span class="brand-icon"><i data-lucide="warehouse"></i></span>
+      <p class="eyebrow">TOKO BANGUNAN ASMARA JAYA</p>
+      <h1>Masuk ke inventory</h1>
+      <p class="subtitle">Gunakan akun Supabase toko untuk membuka data persediaan.</p>
+      <div class="auth-message" id="auth-message" role="status" hidden></div>
+      <label class="field">Email<input name="email" type="email" autocomplete="username" required placeholder="nama@toko.com"></label>
+      <label class="field">Kata sandi<input name="password" type="password" autocomplete="current-password" required placeholder="Kata sandi akun Supabase"></label>
+      <button class="button primary" type="submit"><i data-lucide="log-in"></i><span>Masuk</span></button>
+      <small>Akun dibuat melalui Authentication di Supabase Dashboard.</small>
+    </form>
+  </section>
+  <div class="shell" id="app-shell" hidden>
+    <aside class="sidebar">
+      <a class="brand" href="#"><span class="brand-icon"><i data-lucide="warehouse"></i></span><span><b>asmara jaya</b><small>INVENTORY SYSTEM</small></span></a>
+      <p class="nav-caption">MENU UTAMA</p>
+      <nav><button class="nav-link active" data-view="overview"><i data-lucide="layout-dashboard"></i><span>Ringkasan</span></button><button class="nav-link" data-view="products"><i data-lucide="boxes"></i><span>Daftar barang</span></button><button class="nav-link" data-view="movements"><i data-lucide="arrow-left-right"></i><span>Mutasi stok</span></button></nav>
+      <div class="store-note"><span class="store-icon"><i data-lucide="store"></i></span><b>Toko Bangunan</b><span>Asmara Jaya</span><small><i></i> Sistem operasional</small></div>
+      <small class="version">INVENTORY · V1.0</small>
+    </aside>
+    <main>
+      <header class="topbar"><div class="crumb">Asmara Jaya <i data-lucide="chevron-right"></i> <b id="crumb">Ringkasan</b></div><div class="top-actions"><span id="today"></span><span class="avatar">AJ</span><button class="icon-button" id="sign-out" type="button" title="Keluar"><i data-lucide="log-out"></i></button></div></header>
+      <section class="page-heading"><div><p class="eyebrow">PUSAT KENDALI TOKO</p><h1 id="title">Ringkasan stok</h1><p class="subtitle" id="subtitle">Pantau persediaan dan aktivitas toko hari ini.</p></div><div class="actions"><button class="button secondary" id="refresh" title="Muat ulang"><i data-lucide="refresh-cw"></i><span>Muat ulang</span></button><button class="button primary" id="add"><i data-lucide="plus"></i><span>Tambah barang</span></button></div></section>
+      <div id="notice" class="notice" role="status" hidden></div><div id="loading" class="loading"><i></i> Menghubungkan ke database...</div>
+      <div id="content" hidden><section class="stats" id="stats"></section><div class="columns">
+        <section class="panel inventory" id="inventory"><div class="panel-head"><div><small>PERSEDIAAN</small><h2 id="inventory-title">Stok barang</h2></div><button class="link-button" data-goto="products">Lihat semua <i data-lucide="arrow-up-right"></i></button></div>
+          <div class="toolbar"><label class="search"><i data-lucide="search"></i><input id="search" type="search" placeholder="Cari nama atau SKU..." aria-label="Cari barang"></label><label class="filter"><span class="sr-only">Kategori</span><select id="category-filter"><option value="">Semua kategori</option></select><i data-lucide="chevron-down"></i></label></div>
+          <div class="table-wrap"><table><thead><tr><th>BARANG</th><th>KATEGORI</th><th>HARGA</th><th>STOK</th><th>STATUS</th><th></th></tr></thead><tbody id="products"></tbody></table><div id="empty" class="empty" hidden><i data-lucide="package-open"></i><b>Barang belum tersedia</b><span>Tambahkan barang atau ubah pencarian.</span></div></div>
+        </section>
+        <section class="panel activity" id="activity"><div class="panel-head"><div><small>PEMBARUAN TERBARU</small><h2>Aktivitas stok</h2></div><button class="icon-button" id="all-movements" title="Lihat semua mutasi"><i data-lucide="arrow-up-right"></i></button></div><div id="activity-list" class="activity-list"></div></section>
+      </div></div>
+    </main>
+  </div>
+  <dialog id="product-dialog"><form id="product-form" class="modal"><div class="modal-head"><div><small>KATALOG BARANG</small><h2>Tambah barang</h2></div><button type="button" class="icon-button close" data-close title="Tutup"><i data-lucide="x"></i></button></div>
+    <label class="field">Nama barang<input name="name" required maxlength="120" placeholder="Contoh: Semen Portland 40 kg"></label><div class="form-row"><label class="field">Kode SKU<input name="sku" required maxlength="40" placeholder="SMN-001"></label><label class="field">Satuan<input name="unit" required maxlength="20" value="sak"></label></div>
+    <div class="form-row"><label class="field">Kategori<select name="category_id" id="product-category" required><option value="">Pilih kategori</option></select></label><label class="field">Pemasok<select name="supplier_id" id="product-supplier"><option value="">Tanpa pemasok</option></select></label></div>
+    <div class="form-row"><label class="field">Harga jual<input name="price" type="number" min="0" step="100" required placeholder="0"></label><label class="field">Batas stok minimum<input name="minimum_stock" type="number" min="0" value="5" required></label></div>
+    <div class="modal-actions"><button type="button" class="button secondary" data-close>Batal</button><button class="button primary" type="submit"><i data-lucide="plus"></i><span>Simpan barang</span></button></div></form></dialog>
+  <dialog id="movement-dialog"><form id="movement-form" class="modal"><div class="modal-head"><div><small>PERUBAHAN PERSEDIAAN</small><h2>Catat mutasi stok</h2></div><button type="button" class="icon-button close" data-close title="Tutup"><i data-lucide="x"></i></button></div>
+    <label class="field">Barang<select name="product_id" id="movement-product" required></select></label><fieldset class="movement-types"><legend>Jenis mutasi</legend><label><input type="radio" name="movement_type" value="in" checked><span><i data-lucide="arrow-down-to-line"></i> Stok masuk</span></label><label><input type="radio" name="movement_type" value="out"><span><i data-lucide="arrow-up-from-line"></i> Stok keluar</span></label></fieldset>
+    <label class="field">Jumlah<input name="quantity" type="number" min="1" required placeholder="0"></label><label class="field">Catatan <span class="optional">(opsional)</span><input name="notes" maxlength="180" placeholder="Contoh: Pembelian dari pemasok"></label>
+    <div class="modal-actions"><button type="button" class="button secondary" data-close>Batal</button><button class="button primary" type="submit"><i data-lucide="check"></i><span>Simpan mutasi</span></button></div></form></dialog>
+</body>
+</html>
