@@ -2,7 +2,7 @@
 
 **[Buka Sistem Inventory Toko Bangunan Asmara Jaya](https://alifikriasmara02-lang.github.io/Sistem-Inventory-Toko-Bangunan-Asmara-Jaya/)**
 
-usernama: alifikriasmara02@gmail.con
+username: alifikriasmara02@gmail.con
 password: 1234567
 
 # Sistem Inventory Toko Bangunan Asmara Jaya
